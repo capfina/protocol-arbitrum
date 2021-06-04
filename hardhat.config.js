@@ -44,6 +44,7 @@ module.exports = {
     },
     arbitrum: {
       url: 'http://127.0.0.1:8547',
+      l1_network: 'arbitrum_l1',
       accounts: {
         mnemonic: 'jar deny prosper gasp flush glass core corn alarm treat leg smart'
       }
