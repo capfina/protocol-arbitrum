@@ -13,4 +13,6 @@ task('capToken:getBalance', 'gets CAP balance')
 
 task('capToken:approve', 'gets CAP balance')
   .addParam("cap", "cap contract address")
+  .addOptionalParam("gas", "gas limit")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(approve);

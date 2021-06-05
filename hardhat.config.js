@@ -12,6 +12,8 @@ require('./tasks/arbitrum');
 
 const ropsten_secrets = require('./.secrets/ropsten.json');
 const mainnet_secrets = require('./.secrets/mainnet.json');
+const kovan_secrets = require('./.secrets/kovan.json');
+const arbitrum_kovan_secrets = require('./.secrets/arbitrum_kovan.json');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -34,6 +36,10 @@ module.exports = {
       url: ropsten_secrets.url,
       accounts: ropsten_secrets.accounts
     },
+    kovan: {
+      url: kovan_secrets.url,
+      accounts: kovan_secrets.accounts
+    },
     mainnet: {
       url: mainnet_secrets.url,
       accounts: mainnet_secrets.accounts
@@ -49,10 +55,11 @@ module.exports = {
         mnemonic: 'jar deny prosper gasp flush glass core corn alarm treat leg smart'
       }
     },
-    // arbitrum_kovan: {
-    //   url: 'https://kovan5.arbitrum.io/rpc',
-    //   accounts: arbitrum_kovan_secrets.accounts
-    // }
+    arbitrum_kovan: {
+      url: 'https://kovan5.arbitrum.io/rpc',
+      l1_network: 'kovan',
+      accounts: arbitrum_kovan_secrets.accounts
+    }
   },
   solidity: {
     compilers: [{
