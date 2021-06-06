@@ -112,14 +112,22 @@ contract Governance {
     }
 
     function proposalMaxOperations() public pure returns (uint256) {
-        return 10;
+        return 15;
     }
 
     function forVotesThreshold() public view virtual returns (uint256) {
-        return IERC20(token).totalSupply().mul(4).div(100);
+        uint256 totalSupply = IERC20(token).totalSupply();
+        if (totalSupply <= 50000e18) return 2000e18;
+
+        // 4% of total supply
+        return totalSupply.mul(4).div(100);
     }
 
     function forVotesExpeditedThreshold() public view virtual returns (uint256) {
+        uint256 totalSupply = IERC20(token).totalSupply();
+        if (totalSupply < 50000e18) return 7500e18;
+
+        // 15% of total supply
         return IERC20(token).totalSupply().mul(15).div(100);
     }
 
