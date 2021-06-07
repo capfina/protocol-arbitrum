@@ -27,11 +27,12 @@ const arbitrum_kovan_secrets = require('./.secrets/arbitrum_kovan.json');
 module.exports = {
   defaultNetwork: "development",
   networks: {
-    // L1 Ethereum
+    // Ethereum Local Network
     development: {
       url: 'http://127.0.0.1:8545',
       hardfork: "istanbul"
     },
+    // Ethereum Test Networks
     ropsten: {
       url: ropsten_secrets.url,
       accounts: ropsten_secrets.accounts
@@ -40,21 +41,20 @@ module.exports = {
       url: kovan_secrets.url,
       accounts: kovan_secrets.accounts
     },
+    // Ethereum Main Networks
     mainnet: {
       url: mainnet_secrets.url,
       accounts: mainnet_secrets.accounts
     },
-    // Arbitrum
-    arbitrum_l1: {
+    // Arbitrum Local Networks
+    arbitrum_l1_development: {
       url: 'http://127.0.0.1:7545'
     },
-    arbitrum: {
+    arbitrum_l2_development: {
       url: 'http://127.0.0.1:8547',
-      l1_network: 'arbitrum_l1',
-      accounts: {
-        mnemonic: 'jar deny prosper gasp flush glass core corn alarm treat leg smart'
-      }
+      l1_network: 'arbitrum_l1'
     },
+    // Arbitrum Test Networks
     arbitrum_kovan: {
       url: 'https://kovan5.arbitrum.io/rpc',
       l1_network: 'kovan',
