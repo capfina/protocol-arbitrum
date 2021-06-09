@@ -1,6 +1,7 @@
 pragma solidity ^0.7.3;
 pragma experimental ABIEncoderV2;
 
+import './interfaces/ArbSys.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
 import '@openzeppelin/contracts/math/SafeMath.sol';
@@ -27,6 +28,7 @@ contract Governance {
         uint256[] values;
         string[] signatures;
         bytes[] calldatas;
+        uint256 submitBlock;
         uint256 startBlock;
         uint256 endBlock;
         uint256 expirationBlock;
@@ -73,6 +75,7 @@ contract Governance {
 
     /* ========== STATE VARIABLES ========== */
 
+    bool public isLayer2;
     address public token;
     mapping(address => uint256) private _balances;
     mapping(address => uint256) private _lockedUntil;
@@ -87,11 +90,13 @@ contract Governance {
     /* ========== INITIALIZER ========== */
 
     function initialize(
-        address _token
+        address _token,
+        bool _isLayer2
     ) public {
         require(!initialized, '!initialized');
         initialized = true;
         token = _token;
+        isLayer2 = _isLayer2;
     }
 
     /* ========== VIEWS ========== */
@@ -219,6 +224,9 @@ contract Governance {
         newProposal.values = values;
         newProposal.signatures = signatures;
         newProposal.calldatas = calldatas;
+        if (isLayer2) {
+            newProposal.submitBlock = ArbSys(100).arbBlockNumber(); // arbitrum L2 block number
+        }
         newProposal.startBlock = startBlock;
         newProposal.endBlock = endBlock;
         newProposal.expirationBlock = endBlock.add(executablePeriod());
