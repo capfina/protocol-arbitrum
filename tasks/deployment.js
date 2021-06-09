@@ -3,6 +3,7 @@ const deploySystem = require('../lib/deployment/deploySystem');
 const upgradeSystem = require('../lib/deployment/upgradeSystem');
 const deployImpl = require('../lib/deployment/deployImpl');
 const deployProxy = require('../lib/deployment/deployProxy');
+const deployTestTokens = require('../lib/deployment/deployTestTokens');
 
 subtask('deploy:system', 'deploys system')
   .setAction(deploySystem);
@@ -12,6 +13,9 @@ task('deploy', 'deploys system')
     await run('compile');
     await run('deploy:system');
   });
+
+task('deploy:testtokens', 'deploys tokens to test networks')
+  .setAction(deployTestTokens);
 
 task('deploy:impl', 'deploys contract implementation')
   .addParam('contract', 'contract name')
