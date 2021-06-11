@@ -7,7 +7,6 @@ require('./tasks/accounts');
 require('./tasks/deployment');
 require('./tasks/governance');
 require('./tasks/capToken');
-require('./tasks/trading');
 require('./tasks/arbitrum');
 
 const ropsten_secrets = require('./.secrets/ropsten.json');

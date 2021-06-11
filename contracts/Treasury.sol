@@ -38,15 +38,6 @@ contract Treasury {
     uint256 public withdrawalCheckpoint;
 
     // amount
-    uint256 public dailyOracleFundingLimit;
-
-    // amount
-    uint256 public oracleFundingSinceCheckpoint;
-
-    // block number
-    uint256 public oracleFundingCheckpoint;
-
-    // amount
     uint256 public systemFundsLimit;
 
     IUniswap public uniswapRouter;
@@ -56,9 +47,6 @@ contract Treasury {
 
     address private trading;
     address private oracle;
-
-    event OracleFunded(uint256 amountSpent, uint256 amountFunded);
-    event SwappedOnUniswap(address currency1, address currency2, uint256 amountSpent, uint256 amountReceived);
 
     event NewContracts(address _oracle, address _trading);
     event NewWithdrawalLimit(uint256 amount);
@@ -84,43 +72,9 @@ contract Treasury {
         emit NewWithdrawalLimit(amount);
     }
 
-    function setOracleFundingLimit(uint256 amount) external onlyOwner {
-        dailyOracleFundingLimit = amount;
-        emit NewOracleFundingLimit(amount);
-    }
-
     function setSystemFundsLimit(uint256 amount) external onlyOwner {
         systemFundsLimit = amount;
         emit NewSystemFundsLimit(amount);
-    }
-
-    function fundOracle(
-        uint256 amount
-    ) external onlyOracle {
-        // Check oracle limits. 5760 = blocks in a day for 15s/block
-        if (oracleFundingCheckpoint.add(5760) < block.number) {
-            oracleFundingCheckpoint = block.number;
-            oracleFundingSinceCheckpoint = 0;
-        }
-        uint256 newOFSC = oracleFundingSinceCheckpoint.add(amount);
-        require(newOFSC <= dailyOracleFundingLimit, '!daily_limit');
-        oracleFundingSinceCheckpoint = newOFSC;
-        require(IERC20(currency).approve(address(uniswapRouter), amount), '!approve');
-        address[] memory path = new address[](2);
-        path[0] = currency;
-        path[1] = uniswapRouter.WETH();
-        uint[] memory amounts = uniswapRouter.swapExactTokensForETH(amount, 0, path, oracle, block.timestamp.add(1800));
-        emit OracleFunded(amount, amounts[1]);
-    }
-    
-    function swapOnUniswap(
-        address[] calldata path,
-        uint256 amount
-    ) external onlyOwner {
-        require(path.length > 1, '!invalid_path');
-        require(IERC20(path[0]).approve(address(uniswapRouter), amount), '!approve');
-        uint[] memory amounts = uniswapRouter.swapExactTokensForTokens(amount, 0, path, address(this), block.timestamp.add(1800));
-        emit SwappedOnUniswap(path[0], path[path.length - 1], amount, amounts[1]);
     }
 
     // all = true can be used to move funds to e.g. another treasury contract, including user balances
