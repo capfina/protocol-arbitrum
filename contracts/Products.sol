@@ -73,7 +73,7 @@ contract Products {
         uint256[] calldata fundingRates
     ) external onlyOwner {
 
-        require(symbols.length <= 10, '!max_length');
+        require(symbols.length <= 100, '!max_length');
         require(symbols.length == maxLeverages.length && maxLeverages.length == spreads.length && spreads.length == fundingRates.length, 'Products: WRONG_LENGTH');
 
         for (uint256 i = 0; i < symbols.length; i++) {
